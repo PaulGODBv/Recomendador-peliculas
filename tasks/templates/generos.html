@@ -1,0 +1,410 @@
+{% extends 'base.html' %}
+
+{% block title %} Géneros | MovieHub {% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="containerBox">
+        <div class="info-section">
+            <h3>Selecciona cúal</h3>
+            <div class="titleText"><h2>género</h2></div>
+            <h3>estás buscando</h3>
+        </div>
+
+        <div class="genre-section">
+            <div class="row">
+                <div class="col s12">
+                    <ul class="tabs tabs-fixed-width">
+                        <li class="tab"><a href="#romance" class="active">Romance</a></li>
+                        <li class="tab"><a href="#terror">Terror</a></li>
+                        <li class="tab"><a href="#scifi">Ciencia Ficción</a></li>
+                        <li class="tab"><a href="#comedia">Comedia</a></li>
+                        <li class="tab"><a href="#accion">Acción</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Sección Romance -->
+                <div id="romance" class="col s12">
+                    <div class="row">
+                        <div class="col s12">
+                            <h4 class="genre-title">Romance</h4>
+                            <p class="genre-description">Relatos que giran en torno al amor y las emociones, mostrando conexiones profundas entre personajes y sus desafíos sentimentales.</p>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://es.web.img3.acsta.net/pictures/16/02/04/15/49/599815.jpg" alt="Pelicula 1">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">Titanic<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">Titanic<i class="material-icons right">close</i></span>
+                                    <p>Una aristócrata que viaja en primera clase se enamora de un artista de clase baja a bordo del barco "inundible" en su viaje inaugural.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-2">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://m.media-amazon.com/images/I/81rXTNAr+TL._AC_UF1000,1000_QL80_.jpg" alt="Pelicula 2">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">El Diario de Noah<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">El Diario de Noah<i class="material-icons right">close</i></span>
+                                    <p>Una anciana con demencia escucha la historia de un amor perdido y reencontrado a través de las páginas de un antiguo diario.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-4">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://pics.filmaffinity.com/the_fault_in_our_stars-259624288-large.jpg" alt="Pelicula 3">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">Bajo la misma estrella<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">Bajo la misma estrella<i class="material-icons right">close</i></span>
+                                    <p>Dos adolescentes con cáncer se conocen en un grupo de apoyo y desarrollan una profunda conexión mientras enfrentan sus enfermedades.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-5">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección Terror -->
+                <div id="terror" class="col s12">
+                    <div class="row">
+                        <div class="col s12">
+                            <h4 class="genre-title">Terror</h4>
+                            <p class="genre-description">Narrativas diseñadas para causar miedo y suspenso, con elementos sobrenaturales, monstruos o situaciones perturbadoras.</p>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://pics.filmaffinity.com/Expediente_Warren_The_Conjuring-153245956-large.jpg" alt="Pelicula 1">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">El Conjuro<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">El Conjuro<i class="material-icons right">close</i></span>
+                                    <p>Basada en un caso real, los investigadores paranormales Ed y Lorraine Warren ayudan a una familia aterrorizada por una presencia oscura en su casa.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-6">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://pics.filmaffinity.com/El_resplandor-526136262-large.jpg" alt="Pelicula 2">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">El Resplandor<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">El Resplandor<i class="material-icons right">close</i></span>
+                                    <p>Un escritor acepta un trabajo como cuidador de un hotel aislado durante el invierno, donde una siniestra presencia influye en él y aterroriza a su familia.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-7">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://pics.filmaffinity.com/It-844355670-large.jpg" alt="Pelicula 3">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">It<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">It<i class="material-icons right">close</i></span>
+                                    <p>En un pequeño pueblo, un grupo de niños debe enfrentarse a sus mayores miedos cuando un malvado payaso resurge, responsable de la desaparición de varios niños.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-8">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección Ciencia Ficción -->
+                <div id="scifi" class="col s12">
+                    <div class="row">
+                        <div class="col s12">
+                            <h4 class="genre-title">Ciencia Ficción</h4>
+                            <p class="genre-description">Historias que exploran el futuro, la tecnología, el espacio y lo desconocido, combinando imaginación con ciencia.</p>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://cineuropa.org/Galleries/280/433/poster01_en_big.jpg?1415976789133" alt="Pelicula 1">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">Interestelar<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">Interestelar<i class="material-icons right">close</i></span>
+                                    <p>Un grupo de exploradores viaja a través de un agujero de gusano en el espacio en un intento por asegurar la supervivencia de la humanidad.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-1">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://pics.filmaffinity.com/The_Matrix-155050517-large.jpg" alt="Pelicula 2">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">Matrix<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">Matrix<i class="material-icons right">close</i></span>
+                                    <p>Un programador informático descubre que el mundo en el que vive es una simulación digital controlada por máquinas que han esclavizado a la humanidad.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-9">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card hoverable">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <img class="activator" src="https://pics.filmaffinity.com/Blade_Runner_2049-202270567-large.jpg" alt="Pelicula 3">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">Blade Runner 2049<i class="material-icons right">more_vert</i></span>
+                                    <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">Blade Runner 2049<i class="material-icons right">close</i></span>
+                                    <p>Un blade runner descubre un secreto que podría desestabilizar la sociedad, lo que lo lleva a buscar a Rick Deckard, quien ha estado desaparecido por 30 años.</p>
+                                    <div class="card-action">
+                                        <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pelicula" value="default-10">
+                                            <input type="hidden" name="accion" value="guardar">
+                                            <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Secciones para otros géneros -->
+                <div id="comedia" class="col s12">
+                    <div class="row">
+                        <div class="col s12">
+                            <h4 class="genre-title">Comedia</h4>
+                            <p class="genre-description">Películas diseñadas para hacer reír, con situaciones humorísticas, chistes, gags visuales y personajes cómicos.</p>
+                        </div>
+                        <!-- Aquí irían las películas de comedia -->
+                        <div class="col s12 center">
+                            <p>Próximamente más películas de comedia</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="accion" class="col s12">
+                    <div class="row">
+                        <div class="col s12">
+                            <h4 class="genre-title">Acción</h4>
+                            <p class="genre-description">Películas con escenas de alta energía, persecuciones, combates y efectos especiales impresionantes.</p>
+                        </div>
+                        <!-- Aquí irían las películas de acción -->
+                        <div class="col s12 center">
+                            <p>Próximamente más películas de acción</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <!-- Si no está autenticado, mostrar mensaje para iniciar sesión -->
+    <div class="Container">
+        <h3 class="titleText">Acceso Restringido</h3>
+        <p>Debes iniciar sesión para explorar los géneros de películas.</p>
+        <div class="row button-container">
+            <a href="{% url 'signin' %}" class="btn waves-effect waves-light purple lighten-1 btn-large">
+                <i class="material-icons left">login</i>Iniciar Sesión
+            </a>
+        </div>
+    </div>
+{% endif %}
+
+<style>
+    .genre-section {
+        padding: 2rem;
+        width: 100%;
+    }
+    
+    .genre-title {
+        color: #8e44ad;
+        font-weight: 600;
+        margin-top: 0;
+    }
+    
+    .genre-description {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Estilo para las pestañas */
+    .tabs {
+        background-color: transparent;
+        margin-bottom: 2rem;
+    }
+    
+    .tabs .tab a {
+        color: #8e44ad;
+        font-weight: 500;
+    }
+    
+    .tabs .tab a:hover, .tabs .tab a.active {
+        color: #6a0dad;
+    }
+    
+    .tabs .indicator {
+        background-color: #6a0dad;
+    }
+    
+    /* Animación para las tarjetas */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Toast para confirmación */
+    #toast-container {
+        top: auto !important;
+        bottom: 10% !important;
+        right: 10% !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar tabs
+        var tabs = document.querySelectorAll('.tabs');
+        var tabsInstance = M.Tabs.init(tabs);
+        
+        // Configurar botones de favoritos que no son parte de un formulario
+        var btns = document.querySelectorAll('a.btn-small');
+        btns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Obtener el título de la película
+                var title = this.closest('.card-reveal').querySelector('.card-title').textContent.replace('close', '').trim();
+                
+                // Mostrar toast de confirmación
+                M.toast({
+                    html: '<i class="material-icons left">favorite</i> "' + title + '" añadida a favoritos',
+                    classes: 'rounded purple darken-1',
+                    displayLength: 2000
+                });
+            });
+        });
+        
+        // Configurar botones de formulario para mostrar toast y luego enviar
+        var formBtns = document.querySelectorAll('form button.btn-small');
+        formBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                // Prevenir envío inmediato
+                e.preventDefault();
+                
+                // Obtener el formulario y el título de la película
+                var form = this.closest('form');
+                var title = this.closest('.card-reveal').querySelector('.card-title').textContent.replace('close', '').trim();
+                
+                // Mostrar toast de confirmación
+                M.toast({
+                    html: '<i class="material-icons left">favorite</i> "' + title + '" añadida a favoritos',
+                    classes: 'rounded purple darken-1',
+                    displayLength: 1000
+                });
+                
+                // Enviar el formulario después de un breve retraso para que se vea el toast
+                setTimeout(function() {
+                    form.submit();
+                }, 1000);
+            });
+        });
+    });
+</script>
+{% endblock %}

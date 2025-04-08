@@ -1,0 +1,115 @@
+<nav class="purple darken-4">
+  <div class="nav-wrapper container">
+    <a href="{% url 'home' %}" class="brand-logo">MovieHub</a>
+    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <li><a href="{% url 'home' %}" class="nav-link-animated">Inicio</a></li>
+      
+      {% if user.is_authenticated %}
+      <li><a href="{% url 'generos' %}" class="nav-link-animated">Géneros</a></li>
+      <li><a href="{% url 'recomendaciones' %}" class="nav-link-animated">Recomendaciones</a></li>
+      <li><a href="{% url 'peliculasFavoritas' %}" class="nav-link-animated">Mis Favoritas</a></li>
+      
+      <li class="dropdown-trigger-hover">
+        <a href="#!" class="dropdown-trigger nav-link-animated" data-target="dropdown-tasks">
+          Tareas<i class="material-icons right">arrow_drop_down</i>
+        </a>
+        <ul id="dropdown-tasks" class="dropdown-content purple lighten-5">
+          <li><a href="{% url 'tasks' %}" class="purple-text text-darken-4">Tareas Pendientes</a></li>
+          <li><a href="{% url 'tasks_completed' %}" class="purple-text text-darken-4">Tareas Completadas</a></li>
+          <li><a href="{% url 'create_task' %}" class="purple-text text-darken-4">Crear Tarea</a></li>
+        </ul>
+      </li>
+      
+      <li><a href="{% url 'logout' %}" class="nav-link-animated">Cerrar Sesión</a></li>
+      {% else %}
+      <li><a href="{% url 'signin' %}" class="nav-link-animated">Iniciar Sesión</a></li>
+      <li><a href="{% url 'signup' %}" class="nav-link-animated">Registrarse</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+
+<!-- Menú móvil -->
+<ul class="sidenav purple lighten-5" id="mobile-demo">
+  <li><a href="{% url 'home' %}" class="purple-text text-darken-4">Inicio</a></li>
+  
+  {% if user.is_authenticated %}
+  <li><a href="{% url 'generos' %}" class="purple-text text-darken-4">Géneros</a></li>
+  <li><a href="{% url 'recomendaciones' %}" class="purple-text text-darken-4">Recomendaciones</a></li>
+  <li><a href="{% url 'peliculasFavoritas' %}" class="purple-text text-darken-4">Mis Favoritas</a></li>
+  
+  <li class="divider"></li>
+  <li><div class="subheader purple-text text-darken-4">Tareas</div></li>
+  <li><a href="{% url 'tasks' %}" class="purple-text text-darken-4">Tareas Pendientes</a></li>
+  <li><a href="{% url 'tasks_completed' %}" class="purple-text text-darken-4">Tareas Completadas</a></li>
+  <li><a href="{% url 'create_task' %}" class="purple-text text-darken-4">Crear Tarea</a></li>
+  
+  <li class="divider"></li>
+  <li><a href="{% url 'logout' %}" class="purple-text text-darken-4">Cerrar Sesión</a></li>
+  {% else %}
+  <li><a href="{% url 'signin' %}" class="purple-text text-darken-4">Iniciar Sesión</a></li>
+  <li><a href="{% url 'signup' %}" class="purple-text text-darken-4">Registrarse</a></li>
+  {% endif %}
+</ul>
+
+<style>
+  /* Efecto de expansión para los enlaces del navbar */
+  .nav-link-animated {
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .nav-link-animated:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #e1bee7;
+    transition: width 0.3s ease;
+  }
+  
+  .nav-link-animated:hover {
+    transform: translateY(-2px);
+  }
+  
+  .nav-link-animated:hover:before {
+    width: 100%;
+  }
+  
+  /* Ajustes para el dropdown */
+  .dropdown-content {
+    min-width: 180px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .dropdown-content li a {
+    padding: 14px 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .dropdown-content li a:hover {
+    background-color: #d1c4e9;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar sidenav para móviles
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems);
+    
+    // Inicializar dropdowns
+    var dropdowns = document.querySelectorAll('.dropdown-trigger');
+    var dropdownOptions = {
+      coverTrigger: false,
+      constrainWidth: false,
+      hover: true
+    };
+    var dropdownInstances = M.Dropdown.init(dropdowns, dropdownOptions);
+  });
+</script>

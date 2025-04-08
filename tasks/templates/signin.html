@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container center" style="margin-top: 100px; max-width: 400px;">
+    <div class="card z-depth-3" style="animation: fadeIn 1s ease-in-out;">
+        <div class="card-content">
+            <h4 class="deep-purple-text text-lighten-1" style="font-weight: bold; animation: slideDown 0.8s ease-out;">
+                Iniciar sesión
+            </h4>
+            
+            {% if error %}
+                <p class="red-text" style="font-size: 14px; animation: shake 0.5s;">{{ error }}</p>
+            {% endif %}
+            
+            <form action="{% url 'signin' %}" method="POST">
+                {% csrf_token %}
+                <div class="input-field" style="animation: fadeIn 1.2s;">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                </div>
+                <div class="input-field" style="animation: fadeIn 1.4s;">
+                    {{ form.password.label_tag }}
+                    {{ form.password }}
+                </div>
+                
+                <button type="submit" class="btn waves-effect waves-light deep-purple lighten-1 btn-large oval-button"
+                    style="transition: transform 0.3s ease; animation: fadeIn 1.6s;"
+                    onmouseover="this.style.transform='scale(1.1)';"
+                    onmouseout="this.style.transform='scale(1)';">
+                    Iniciar sesión
+                </button>
+            </form>
+        </div>
+        <div class="card-action" style="animation: fadeIn 1.8s;">
+            <p>¿No tienes cuenta? 
+                <a href="{% url 'signup' %}" class="deep-purple-text text-lighten-1"
+                    style="transition: color 0.3s ease;"
+                    onmouseover="this.style.color='#7e57c2';"
+                    onmouseout="this.style.color='';">
+                    Regístrate aquí
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+}
+</style>
+{% endblock %}

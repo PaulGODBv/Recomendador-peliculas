@@ -1,0 +1,497 @@
+{% extends 'base.html' %}
+
+{% block title %} Tus Favoritos | MovieHub {% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="containerBox">
+        <div class="info-section">
+            <h3>Selecciona una película y qué quieres hacer</h3>
+            <div class="titleText"><h2>Opciones de Favoritos</h2></div>
+        </div>
+
+        <div class="form-section">
+            <form method="POST" action="{% url 'guardar_interaccion' %}" id="interactionForm">
+                {% csrf_token %}
+
+                <!-- Selector de película -->
+                <div class="form-group">
+                    <label for="pelicula">Selecciona una película:</label>
+                    <select name="pelicula" id="pelicula" class="form-control" required>
+                        <option value="" disabled selected>Elige una película</option>
+                        {% if peliculas %}
+                            {% for pelicula in peliculas %}
+                                <option value="{{ pelicula.id }}">{{ pelicula.titulo }}</option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="default-1">Interestelar</option>
+                            <option value="default-2">Titanic</option>
+                            <option value="default-3">El Padrino</option>
+                        {% endif %}
+                    </select>
+                    <div class="error-message" id="pelicula-error"></div>
+                </div>
+
+                <!-- Selector de acción -->
+                <div class="form-group">
+                    <label for="accion">¿Qué quieres hacer?</label>
+                    <select name="accion" id="accion" class="form-control" onchange="mostrarCampos()" required>
+                        <option value="" disabled selected>Elige una acción</option>
+                        <option value="reseñar">Reseñar</option>
+                        <option value="calificar">Calificar</option>
+                        <option value="guardar">Guardar en Favoritos</option>
+                    </select>
+                    <div class="error-message" id="accion-error"></div>
+                </div>
+
+                <!-- Campo de reseña -->
+                <div class="form-group" id="campo-reseña" style="display: none;">
+                    <label for="reseña">Escribe tu reseña:</label>
+                    <textarea name="reseña" id="reseña" class="form-control" placeholder="Escribe aquí tu reseña..." rows="4" minlength="10" maxlength="500"></textarea>
+                    <div class="character-counter">
+                        <span id="char-count">0</span>/500 caracteres
+                    </div>
+                    <div class="error-message" id="reseña-error"></div>
+                </div>
+
+                <!-- Campo de calificación -->
+                <div class="form-group" id="campo-calificacion" style="display: none;">
+                    <label for="calificacion">Calificación (1-10)</label>
+                    <div class="rating-container">
+                        {% for i in "12345678910" %}
+                            <label class="rating-label">
+                                <input type="radio" name="calificacion" value="{{ i }}">
+                                <span class="rating-star">{{ i }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <div class="error-message" id="calificacion-error"></div>
+                </div>
+
+                <!-- Botón de enviar -->
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="material-icons left">save</i>Guardar
+                    </button>
+                    <a href="{% url 'reviews_list' %}" class="btn btn-secondary">
+                        <i class="material-icons left">list</i>Ver Reseñas
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Sección de películas favoritas -->
+        <div class="favorites-section">
+            <div class="info-section">
+                <div class="titleText"><h2>Tus Películas Favoritas</h2></div>
+            </div>
+            
+            {% if favoritos %}
+                <div class="favorites-container">
+                    {% for favorito in favoritos %}
+                        <div class="favorite-card">
+                            <div class="favorite-content">
+                                <h4>{{ favorito.titulo }}</h4>
+                                <p class="favorite-date">Añadida el: {{ favorito.fecha_agregado|date:"d/m/Y H:i" }}</p>
+                                <div class="favorite-actions">
+                                    <a href="{% url 'detalle_pelicula' favorito.id %}" class="btn-small purple lighten-1">
+                                        <i class="material-icons left">info</i>Ver detalles
+                                    </a>
+                                    <form method="POST" action="{% url 'eliminar_favorito' favorito.id %}" class="inline-form" onsubmit="return confirm('¿Estás seguro de eliminar esta película de tus favoritos?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-small red lighten-1">
+                                            <i class="material-icons left">delete</i>Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-favorites">
+                    <p>Aún no tienes películas favoritas. ¡Añade algunas usando el formulario de arriba!</p>
+                    <i class="material-icons large">favorite_border</i>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <div class="Container">
+        <h3 class="titleText">Acceso Restringido</h3>
+        <p>Debes iniciar sesión para acceder a esta sección.</p>
+        <div class="row button-container">
+            <a href="{% url 'signin' %}" class="btn waves-effect waves-light purple lighten-1 btn-large">
+                <i class="material-icons left">login</i>Iniciar Sesión
+            </a>
+        </div>
+    </div>
+{% endif %}
+
+<style>
+    .containerBox {
+        background-color: white; 
+        color: #333;
+    }
+    .form-section {
+        flex-direction: column;
+        display: flex;
+        width: 100%;
+        padding: 40px;
+        align-items: auto;
+        justify-content: center;
+    }
+    .form-group {
+        margin: 15px 0;
+        text-align: left;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        background-color: white;
+    }
+    .btn-primary {
+        background-color: #8e44ad;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        cursor: pointer;
+        border-radius: 25px;
+        margin: 20px 10px 10px 0;
+        transition: 0.3s;
+    }
+    .btn-primary:hover {
+        background-color: #6c3483;
+    }
+    .btn-secondary {
+        background-color: #3498db;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        cursor: pointer;
+        border-radius: 25px;
+        margin: 20px 10px 10px 0;
+        transition: 0.3s;
+    }
+    .btn-secondary:hover {
+        background-color: #2980b9;
+    }
+    .error-message {
+        color: #e74c3c;
+        font-size: 0.8rem;
+        margin-top: 5px;
+        min-height: 20px;
+    }
+    .character-counter {
+        text-align: right;
+        font-size: 0.8rem;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+    .rating-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .rating-label {
+        cursor: pointer;
+    }
+    .rating-label input {
+        display: none;
+    }
+    .rating-star {
+        display: inline-block;
+        background-color: #ecf0f1;
+        padding: 10px 15px;
+        border-radius: 50%;
+        transition: 0.3s;
+    }
+    .rating-label input:checked + .rating-star {
+        background-color: #8e44ad;
+        color: white;
+    }
+    .form-buttons {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    /* Estilo para el loader */
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #8e44ad;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 2s linear infinite;
+        display: inline-block;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    /* Estilo para el mensaje de confirmación */
+    .confirmation-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    .confirmation-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .confirmation-icon {
+        font-size: 48px;
+        color: #27ae60;
+        margin-bottom: 20px;
+    }
+    
+    /* Estilos para la sección de favoritos */
+    .favorites-section {
+        padding: 0 40px 40px 40px;
+    }
+    .favorites-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .favorite-card {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .favorite-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .favorite-content {
+        padding: 20px;
+    }
+    .favorite-content h4 {
+        margin-top: 0;
+        color: #8e44ad;
+        font-size: 1.2rem;
+    }
+    .favorite-date {
+        color: #7f8c8d;
+        font-size: 0.8rem;
+        margin-bottom: 15px;
+    }
+    .favorite-actions {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+    .inline-form {
+        display: inline-block;
+    }
+    .no-favorites {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    .no-favorites p {
+        margin-bottom: 20px;
+        color: #7f8c8d;
+    }
+    .no-favorites i {
+        color: #8e44ad;
+        opacity: 0.5;
+    }
+</style>
+
+<!-- Modal de confirmación -->
+<div id="confirmationModal" class="confirmation-modal">
+    <div class="confirmation-content">
+        <i class="material-icons confirmation-icon">check_circle</i>
+        <h4 id="confirmationTitle">¡Acción completada!</h4>
+        <p id="confirmationMessage">Tu acción ha sido guardada correctamente.</p>
+        <button class="btn purple" onclick="closeConfirmation()">Aceptar</button>
+    </div>
+</div>
+
+<script>
+    // Inicialización y validación del formulario
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar campos según la acción seleccionada al cargar la página
+        mostrarCampos();
+        
+        // Contador de caracteres para la reseña
+        document.getElementById('reseña').addEventListener('input', function() {
+            var charCount = this.value.length;
+            document.getElementById('char-count').textContent = charCount;
+            
+            // Cambiar color si se acerca al límite
+            if (charCount > 450) {
+                document.getElementById('char-count').style.color = '#e74c3c';
+            } else {
+                document.getElementById('char-count').style.color = '#7f8c8d';
+            }
+        });
+        
+        // Validación del formulario
+        document.getElementById('interactionForm').addEventListener('submit', function(e) {
+            // Solo prevenir el envío si la validación falla
+            if (!validarFormulario()) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Si la validación es exitosa, mostrar indicador de carga
+            var submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<div class="loader"></div> Guardando...';
+            submitBtn.disabled = true;
+            
+            // Permitir que el formulario se envíe normalmente
+            return true;
+        });
+        
+        // Mostrar confirmación si hay parámetros en la URL
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            var action = urlParams.get('action');
+            var movieId = urlParams.get('movie');
+            
+            // Buscar el título de la película
+            var movieTitle = "la película";
+            
+            // Si es un ID por defecto, buscar en las opciones del selector
+            if (movieId && movieId.startsWith('default-')) {
+                var options = document.querySelectorAll('#pelicula option');
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].value === movieId) {
+                        movieTitle = options[i].textContent;
+                        break;
+                    }
+                }
+            }
+            
+            // También buscar en las tarjetas de favoritos
+            var favoriteCards = document.querySelectorAll('.favorite-card h4');
+            for (var i = 0; i < favoriteCards.length; i++) {
+                if (favoriteCards[i].dataset.id === movieId) {
+                    movieTitle = favoriteCards[i].textContent;
+                    break;
+                }
+            }
+            
+            let confirmTitle = '¡Acción completada!';
+            let confirmMessage = '';
+            
+            switch(action) {
+                case 'reseñar':
+                    confirmTitle = '¡Reseña guardada!';
+                    confirmMessage = `Tu reseña de "${movieTitle}" ha sido guardada correctamente.`;
+                    break;
+                case 'calificar':
+                    confirmTitle = '¡Calificación guardada!';
+                    confirmMessage = `Has calificado "${movieTitle}" correctamente.`;
+                    break;
+                case 'guardar':
+                    confirmTitle = '¡Película añadida a favoritos!';
+                    confirmMessage = `"${movieTitle}" ha sido añadida a tu lista de favoritos.`;
+                    break;
+            }
+            
+            document.getElementById('confirmationTitle').textContent = confirmTitle;
+            document.getElementById('confirmationMessage').textContent = confirmMessage;
+            document.getElementById('confirmationModal').style.display = 'block';
+            
+            // Limpiar los parámetros de la URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
+    
+    function mostrarCampos() {
+        let accion = document.getElementById("accion").value;
+        document.getElementById("campo-reseña").style.display = (accion === "reseñar") ? "block" : "none";
+        document.getElementById("campo-calificacion").style.display = (accion === "calificar") ? "block" : "none";
+        
+        // Resetear mensajes de error
+        document.querySelectorAll('.error-message').forEach(function(el) {
+            el.textContent = '';
+        });
+    }
+    
+    function validarFormulario() {
+        let isValid = true;
+        
+        // Validar película seleccionada
+        const pelicula = document.getElementById('pelicula');
+        if (!pelicula.value) {
+            document.getElementById('pelicula-error').textContent = '⚠️ Por favor, selecciona una película';
+            isValid = false;
+        } else {
+            document.getElementById('pelicula-error').textContent = '';
+        }
+        
+        // Validar acción seleccionada
+        const accion = document.getElementById('accion');
+        if (!accion.value) {
+            document.getElementById('accion-error').textContent = '⚠️ Por favor, selecciona una acción';
+            isValid = false;
+        } else {
+            document.getElementById('accion-error').textContent = '';
+        }
+        
+        // Validar campos específicos según la acción seleccionada
+        if (accion.value === 'reseñar') {
+            const reseña = document.getElementById('reseña');
+            if (!reseña.value) {
+                document.getElementById('reseña-error').textContent = '⚠️ Por favor, escribe una reseña';
+                isValid = false;
+            } else if (reseña.value.length < 10) {
+                document.getElementById('reseña-error').textContent = '⚠️ La reseña debe tener al menos 10 caracteres';
+                isValid = false;
+            } else {
+                document.getElementById('reseña-error').textContent = '';
+            }
+        }
+        
+        if (accion.value === 'calificar') {
+            const calificaciones = document.querySelectorAll('input[name="calificacion"]');
+            let calificacionSeleccionada = false;
+            
+            calificaciones.forEach(function(calificacion) {
+                if (calificacion.checked) {
+                    calificacionSeleccionada = true;
+                }
+            });
+            
+            if (!calificacionSeleccionada) {
+                document.getElementById('calificacion-error').textContent = '⚠️ Por favor, selecciona una calificación';
+                isValid = false;
+            } else {
+                document.getElementById('calificacion-error').textContent = '';
+            }
+        }
+        
+        return isValid;
+    }
+    
+    function closeConfirmation() {
+        document.getElementById('confirmationModal').style.display = 'none';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %} Recomendaciones | MovieHub {% endblock %}
+{% if user.is_authenticated %}
+    {% block content %}
+    <div class="containerBox">
+        <h3 class="center">Películas Recomendadas</h3>
+        <div class="row">
+            {% if recomendaciones %}
+                {% for pelicula in recomendaciones %}
+                    <div class="col s12 m4">
+                        <div class="card hoverable">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <img class="activator" src="{{ pelicula.imagen }}" alt="{{ pelicula.titulo }}">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">{{ pelicula.titulo }}<i class="material-icons right">more_vert</i></span>
+                                <p><a href="#" class="purple-text text-darken-2">Ver detalles</a></p>
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">{{ pelicula.titulo }}<i class="material-icons right">close</i></span>
+                                <p>{{ pelicula.descripcion }}</p>
+                                <div class="card-action">
+                                    <form method="POST" action="{% url 'guardar_interaccion' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="pelicula" value="{{ pelicula.id }}">
+                                        <input type="hidden" name="accion" value="guardar">
+                                        <button type="submit" class="btn-small purple darken-1 waves-effect waves-light">Agregar a favoritos</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col s12 center">
+                    <p>No hay recomendaciones disponibles en este momento.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <style>
+        /* Animación para las tarjetas */
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar botones de formulario para mostrar toast y luego enviar
+            var formBtns = document.querySelectorAll('form button.btn-small');
+            formBtns.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    // Prevenir envío inmediato
+                    e.preventDefault();
+                    
+                    // Obtener el formulario y el título de la película
+                    var form = this.closest('form');
+                    var title = this.closest('.card-reveal').querySelector('.card-title').textContent.replace('close', '').trim();
+                    
+                    // Mostrar toast de confirmación
+                    M.toast({
+                        html: '<i class="material-icons left">favorite</i> "' + title + '" añadida a favoritos',
+                        classes: 'rounded purple darken-1',
+                        displayLength: 1000
+                    });
+                    
+                    // Enviar el formulario después de un breve retraso para que se vea el toast
+                    setTimeout(function() {
+                        form.submit();
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+    {% endblock %}
+{% else %}
+    <!-- Si no está autenticado, mostrar mensaje para iniciar sesión -->
+    <div class="Container">
+        <h3 class="titleText">Acceso Restringido</h3>
+        <p>Debes iniciar sesión para explorar los géneros de películas.</p>
+        <div class="row button-container">
+            <a href="{% url 'signin' %}" class="btn waves-effect waves-light purple lighten-1 btn-large">
+                <i class="material-icons left">login</i>Iniciar Sesión
+            </a>
+        </div>
+    </div>
+{% endif %}

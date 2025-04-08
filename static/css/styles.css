@@ -1,0 +1,26 @@
+/* Sidebar con degradado */
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    background: linear-gradient(135deg, #4B0082, #8A2BE2);
+    border-radius: 20px 0 0 20px;
+}
+
+.text-gradient {
+    background: linear-gradient(to right, #ff7eb3, #ff758c);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Ajustes de tarjetas */
+.card {
+    border: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón de continuar */
+.btn-dark {
+    border-radius: 50px;
+    font-size: 18px;
+}
